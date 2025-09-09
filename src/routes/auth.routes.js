@@ -32,6 +32,13 @@ router.post('/register', async (req, res) => {
 
 })
 
+// protected api
+router.get('/user', async (req, res) => {
+    const { token } = req.cookies;
+
+
+})
+
 
 
 module.exports = router;
