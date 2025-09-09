@@ -34,7 +34,27 @@ router.post('/register', async (req, res) => {
 
 // protected api
 router.get('/user', async (req, res) => {
-    const { token } = req.cookies;
+    const { token } = req.cookies.token;
+    if (!token) {
+        return res.status(401).json({
+            message: "Unauthorized token not found"
+        })
+    }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const user = await userModel.findOne({
+            _id: decoded.id
+        })
+        return res.status(200).json({
+            message: "User fetched successfully",
+            user
+        })
+    } catch (error) {
+        return res.status(401).json({
+            message: "Unauthorized invalid token"
+        })
+    }
 
 
 })
